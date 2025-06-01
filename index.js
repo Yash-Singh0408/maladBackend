@@ -1,20 +1,27 @@
-// server.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import transactionsRoute from "./transactions_route.js"; 
+import transactionsRoute from "./transactions_route.js";
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// Secure CORS Configuration
+const corsOptions = {
+  origin: "https://murbad.vercel.app", // change to your frontend URL
+  methods: ["GET", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// Route setup
+// Routes
 app.use("/api/transactions", transactionsRoute);
 
-// Connect to MongoDB and start server
+// MongoDB + Server Init
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
